@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!-- <html> -->
+<head>
+    <meta charset=utf-8>
+    <!-- <meta content="utf-8" http-equiv="encoding"> -->
+
+    <title>SOSVis</title>
+     <!-- CSS Libraries -->
+     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+     <!-- CSS Source -->
+     <!-- <link rel="stylesheet" href="./src/css/main.css" /> -->
+
+     <!-- JS Libraries -->
+     <script   src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-time-format.v3.min.js"></script>
+
+    <!-- <script src="./src/js/main.js"></script> -->
+</head>
+
+<!-- <body onload="App.start();">
+     -->
+     <style>
+
+        text {
+            font-family: sans-serif;
+            fill: #000000;
+        }
+
+        table {
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 500px;
+            font-family: sans-serif;
+            font-size: 0.7em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #d9d9d9;
+        }
+
+        .brushed {
+            fill: #ff3399;
+            stroke: #8e1b54;
+            opacity: 1.0;
+        }
+
+        .non_brushed {
+            fill: #404040;
+            opacity: 0.5;
+        }
+
+    </style>
+<body>
+    <script type="text/javascript">
+        var margin = {top: 20, right: 0, bottom: 50, left: 85},
+            svg_dx = 500, 
+            svg_dy = 400,
+            plot_dx = svg_dx - margin.right - margin.left,
+            plot_dy = svg_dy - margin.top - margin.bottom;
+
+            var x = d3.scaleLinear().range([margin.left, plot_dx]),
+            y = d3.scaleLinear().range([plot_dy, margin.top]);
+
+            var formatdate = d3.timeFormat("%x"),
+            formatpolarity = d3.format(",.7f");
+            // formatHsGradAxis = d3.format(".0%");
+
+            var svg = d3.select("#chart")
+                    .append("svg")
+                    .attr("width", svg_dx)
+                    .attr("height", svg_dy);
+
+            d3.csv("../../data/parsed_rows_SaveOurStages.csv", d => {
+
+            var n = d.length;
+
+            var d_extent_x = d3.extent(d, d => +d.date),
+                d_extent_y = d3.extent(d, d => +d.polarity);
+
+            x.domain(d_extent_x);
+            y.domain(d_extent_y);
+
+            var axis_x = d3.axisBottom(x)
+                        .tickFormat(formatdate),
+                axis_y = d3.axisLeft(y)
+                        .tickFormat(formatpolarity);
+
+            svg.append("g")
+            .attr("id", "axis_x")
+            // .attr("transform", "translate(0," + (plot_dy + margin.bottom / 2) + ")")
+            .call(axis_x);
+
+            svg.append("g")
+            .attr("id", "axis_y")
+            // .attr("transform", "translate(" + (margin.left / 2) + ", 0)")
+            .call(axis_y);
+
+            d3.select("#axis_x")
+            .append("text")
+            .attr("transform", "translate(360, -10)")
+            .text("Date");
+
+            d3.select("#axis_y")
+            .append("text")
+            .attr("transform", "rotate(-90) translate(-20, 15)")
+            .text("Sentiment Polarity");
+
+            var circles = svg.append("g")
+                            .selectAll("circle")
+                            .data(d)
+                            .enter()
+                            .append("circle")
+                            .attr("r", 5)
+                            .attr("cx", (d) => x(+d.date))
+                            .attr("cy", (d) => y(+d.polarity))
+                            .attr("class", "non_brushed");
+            });
+    </script>
+    
+</body>
+<!-- </html> -->
