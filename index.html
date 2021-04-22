@@ -169,14 +169,14 @@
 
         
 
-        // Adds the svg canvas
-            var svg = d3.select("body")
-                .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                    .attr("transform", 
-                        "translate(" + margin.left + "," + margin.top + ")");
+        // // Adds the svg canvas
+        //     var svg = d3.select("body")
+        //         .append("svg")
+        //             .attr("width", width + margin.left + margin.right)
+        //             .attr("height", height + margin.top + margin.bottom)
+        //         .append("g")
+        //             .attr("transform", 
+        //                 "translate(" + margin.left + "," + margin.top + ")");
 
 
         var parseDate = d3.timeFormat("%m/%d/%Y");
@@ -186,11 +186,12 @@
         
             d3.select("select")
            .on("change",function(d){
-            selected = d3.select("#d3-dropdown").node().value;
-            datafile = "parsed_rows_"+ selected +".csv"
-            console.log( datafile );
-            d3.select("#selected-dropdown").text(selected);
-            loadData(datafile);
+                d3.select("svg").remove();
+                selected = d3.select("#d3-dropdown").node().value;
+                datafile = "parsed_rows_"+ selected +".csv"
+                console.log( datafile );
+                d3.select("#selected-dropdown").text(selected);
+                loadData(datafile);
            })
         
         loadData(datafile);
@@ -230,6 +231,15 @@
             y.domain([-1, d3.max(data, function(d) { return d.polarity; })]);
 
             var color_scale = d3.scaleLinear().domain([-1, 1]).range(['red', 'blue']);
+
+             // Adds the svg canvas
+             var svg = d3.select("body")
+                .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform", 
+                        "translate(" + margin.left + "," + margin.top + ")");
             
              // Add the scatterplot
              var circles = svg.selectAll("dot")
